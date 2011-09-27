@@ -225,14 +225,14 @@ def main(args=sys.argv[1:]):
             print guess_mime_type
 
         detectdirs = '-i' not in argdict
-        dryrun = '-n' not in argdict
+        dryrun = '-n' in argdict
         for folder in trailing or '.':
             if len(trailing) > 1:
                 dest = trailing.pop()
             else:
                 dest = folder
 
-            if not dryrun:
+            if dryrun:
                 print 'Destination folder: %s' % dest
                 dest = None
             organize(folder, dest, detectdirs, maxdiversity)
