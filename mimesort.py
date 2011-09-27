@@ -45,7 +45,7 @@ try:
             return magic.from_file(path, mime=True), None
         return mimetype, _
 
-except ZeroDivisionError as err:
+except Exception as err:
     if isinstance(err, AttributeError):
         print >> sys.stderr, "Available version of python-magic not supported."
     guess_mime_type = mimetypes.guess_type
