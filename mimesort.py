@@ -226,6 +226,7 @@ def main(args=sys.argv[1:]):
 
         detectdirs = '-i' not in argdict
         dryrun = '-n' in argdict
+        promptuser = '-y' not in argdict
         for folder in trailing or '.':
             if len(trailing) > 1:
                 dest = trailing.pop()
@@ -235,6 +236,11 @@ def main(args=sys.argv[1:]):
             if dryrun:
                 print 'Destination folder: %s' % dest
                 dest = None
+            elif not trailing and promptuser:
+                response = raw_input('Sort %s? [N/y] ' % os.getcwd())
+                if response.strip().lower() != 'y':
+                    exit(0)
+
             organize(folder, dest, detectdirs, maxdiversity)
 
 
