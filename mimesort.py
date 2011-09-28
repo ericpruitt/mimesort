@@ -43,7 +43,7 @@ try:
         mimetype, _ = mimetypes.guess_type(path)
         if not mimetype or mimetype.endswith('/octet-stream'):
             magicmime = magic.from_file(path, mime=True)
-            if '/' not in magicmime:
+            if magicmime and '/' not in magicmime:
                 return None, None
             return magicmime, None
         return mimetype, _
