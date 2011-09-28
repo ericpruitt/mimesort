@@ -222,7 +222,6 @@ def main(args=sys.argv[1:]):
         if '-m' in argdict:
             global guess_mime_type
             guess_mime_type = mimetypes.guess_type
-            print guess_mime_type
 
         detectdirs = '-i' not in argdict
         dryrun = '-n' in argdict
