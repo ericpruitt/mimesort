@@ -19,6 +19,48 @@ A Shannon index threshold of 0.6 does a good job of classifying folders to my
 liking, but I recommend doing some dry-runs to see works best for you.
 
 
+Usage
+-----
+
+The scripts usage is pretty simple:
+
+    mimesort.py [OPTIONS] [DIRECTORY... [DESTINATION]]
+
+When no directory is supplied, mimesort works on the current working directory
+but prompts the user before proceeding. When multiple directories are supplied
+as arguments, the last folder is used as the destination for the sorted
+contents of the preceding folders.
+
+
+Example
+-------
+
+    ~/Downloads$ mimesort -d 0.6 | tail -n15
+    ./shellinabox_2.10-1_amd64.deb                     debian-package
+    ./Bat Euthanasia.pdf                               pdf
+    ./AmazonMP3-1309433311.amz                         plain
+    ./cruisecontrol-bin-2.8.4                    1.566 mixed
+    ./WebShell-0.9.6                             1.476 mixed
+    ./kien-ctrlp.vim-e50970f.tar.gz                    tar
+    ./531 Manual.pdf                                   pdf
+    ./xflux.tgz                                        tar
+    ./mHXiz.png                                        image
+    ./Full ...otherhood 1-64 (Eng Dub)           0.000 video
+    ./Sunflower-0.1a-26.tgz                            tar
+    ./ipmansubs.zip                                    zip
+    ./Pokemans.mp3                                     audio
+    ./Windo...it-English-Developer.iso                 iso9660-image
+    ./amazonmp3                                  0.000 debian-package
+
+    ~/Downloads$ ls
+    audio           iso9660-image   pdf                     shellscript
+    csv             java-archive    plain                   tar
+    debian-package  java-jnlp-file  postscript              unknown
+    document        message         redhat-package-manager  video
+    executable      mixed           ruby                    xml
+    image           msdos-program   sh                      zip
+
+
 Options
 -------
 
@@ -55,16 +97,3 @@ less accurate.
 When mimesort is called without any arguments, it will attempt to sort the
 current working directory but prompts the user before doing so. This argument
 eliminates the prompt and will sort the current working directory immediately.
-
-
-Usage
------
-
-The scripts usage is pretty simple:
-
-    mimesort.py [OPTIONS] [DIRECTORY... [DESTINATION]]
-
-When no directory is supplied, mimesort works on the current working directory
-but prompts the user before proceeding. When multiple directories are supplied
-as arguments, the last folder is used as the destination for the sorted
-contents of the preceding folders.
