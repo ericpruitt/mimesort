@@ -214,7 +214,7 @@ def main(args=sys.argv[1:]):
     argdict = dict(arguments)
     maxdiversity = argdict.get('-d', MAX_DIVERSITY)
     if '-h' in argdict:
-        print os.path.basename(__file__), '[-d NUM] [-s] [-i] [DIR... [DEST]]'
+        print os.path.basename(__file__), '[OPTIONS] [DIR... [DEST]]'
         print '\t-h         Display this message and quit'
         print '\t-d NUMBER  Threshold for Shannon diversity index'
         print '\t-i         Ignore folders that appear to be sorted'
@@ -240,7 +240,7 @@ def main(args=sys.argv[1:]):
                 dest = None
             elif not trailing and promptuser:
                 response = raw_input('Sort %s? [N/y] ' % os.getcwd())
-                if response.strip().lower() != 'y':
+                if not response.strip().lower().startswith('y'):
                     exit(0)
 
             organize(folder, dest, detectdirs, maxdiversity)
