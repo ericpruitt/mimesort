@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import print_function, division
+
 import errno
 import getopt
 import math
@@ -50,7 +53,10 @@ try:
 
 except Exception as err:
     if isinstance(err, AttributeError):
-        print >> sys.stderr, "Available version of python-magic not supported."
+        print(
+            "Available version of python-magic not supported.",
+            file=sys.stderr
+        )
     guess_mime_type = mimetypes.guess_type
 
 
@@ -76,7 +82,7 @@ def diversity(elements):
                 mode = [element]
 
     total = float(len(elements))
-    freqs = [count / total for _, count in bucket.iteritems()]
+    freqs = [count / total for _, count in bucket.items()]
     diversity = -sum(map(operator.mul, freqs, map(math.log, freqs)))
 
     # Do not return a negative zero
@@ -100,7 +106,11 @@ def classify(path, guesser=None):
     if not mimetype:
         return None
 
-    mediatype, mediasubtype = mimetype.split('/')
+    try:
+        mediatype, mediasubtype = mimetype.split('/')
+    except ValueError:
+        mediatype, mediasubtype = ("application", "octet-stream")
+
     if mediatype in ('application', 'text'):
         mediatype = mediasubtype
         if mediatype == 'octet-stream':
@@ -181,7 +191,7 @@ def organize(folder, dest=False, detectdirs=True, maxdiversity=MAX_DIVERSITY):
         if len(left) > 40:
             # Truncate spaces starting from the right side of the string
             left = left[::-1].replace(' ', '', len(left) - 50)[::-1]
-        print left + ' ' + category
+        print(left + ' ' + category)
 
         if dest is None:
             continue
@@ -189,21 +199,21 @@ def organize(folder, dest=False, detectdirs=True, maxdiversity=MAX_DIVERSITY):
         destination = os.path.join(dest or folder, category)
         try:
             os.makedirs(destination)
-        except OSError as (err, msg):
-            if err != errno.EEXIST:
-                print >> sys.stderr, '%s: %s' % (destination, msg)
+        except OSError as err:
+            if err.errno != errno.EEXIST:
+                print('%s: %s' % (destination, err), file=sys.stderr)
                 exit(1)
 
         if os.path.isdir(destination):
             if os.path.samefile(path, destination):
-                print >> sys.stderr, '%s: Source is destination.' % path
+                print('%s: Source is destination.' % path, file=sys.stderr)
             else:
                 try:
                     shutil.move(path, destination)
                 except Exception as err:
-                    print >> sys.stderr, '%s: %s' % (path, err.message)
+                    print('%s: %s' % (path, err.message), file=sys.stderr)
         else:
-            print >> sys.stderr, '%s: Destination is not a folder.' % path
+            print('%s: Destination is not a folder.' % path, file=sys.stderr)
 
 
 def main(args=sys.argv[1:]):
@@ -214,12 +224,12 @@ def main(args=sys.argv[1:]):
     argdict = dict(arguments)
     maxdiversity = argdict.get('-d', MAX_DIVERSITY)
     if '-h' in argdict:
-        print os.path.basename(__file__), '[OPTIONS] [DIR... [DEST]]'
-        print '\t-h         Display this message and quit'
-        print '\t-d NUMBER  Threshold for Shannon diversity index'
-        print '\t-i         Ignore folders that appear to be sorted'
-        print '\t-n         Display categorizations and exit'
-        print '\t-m         Do not use python-magic even if it is available'
+        print(os.path.basename(__file__), '[OPTIONS] [DIR... [DEST]]')
+        print('\t-h         Display this message and quit')
+        print('\t-d NUMBER  Threshold for Shannon diversity index')
+        print('\t-i         Ignore folders that appear to be sorted')
+        print('\t-n         Display categorizations and exit')
+        print('\t-m         Do not use python-magic even if it is available')
 
     else:
         if '-m' in argdict:
@@ -236,7 +246,7 @@ def main(args=sys.argv[1:]):
                 dest = folder
 
             if dryrun:
-                print 'Destination folder: %s' % dest
+                print('Destination folder: %s' % dest)
                 dest = None
             elif not trailing and promptuser:
                 response = raw_input('Sort %s? [N/y] ' % os.getcwd())
@@ -249,7 +259,7 @@ def main(args=sys.argv[1:]):
 # Generate set containing all possible folder names
 IGNORED_FILES = set((MIXED_TYPES_LABEL, UNKNOWN_TYPES_LABEL))
 strict, loose = mimetypes.MimeTypes().types_map
-for extension in strict.keys() + loose.keys():
+for extension in list(strict.keys()) + list(loose.keys()):
     IGNORED_FILES.add(classify('x' + extension, guesser=mimetypes.guess_type))
 
 if __name__ == '__main__':
