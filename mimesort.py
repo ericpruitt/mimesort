@@ -249,7 +249,7 @@ def main(args=sys.argv[1:]):
                 print('Destination folder: %s' % dest)
                 dest = None
             elif not trailing and promptuser:
-                response = raw_input('Sort %s? [N/y] ' % os.getcwd())
+                response = input('Sort %s? [N/y] ' % os.getcwd())
                 if not response.strip().lower().startswith('y'):
                     exit(0)
 
